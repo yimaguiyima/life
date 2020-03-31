@@ -1,0 +1,3 @@
+install CygwinPortable http://pan.baidu.com/s/1nvCV1fb 密码：b69f
+env path D:\Program Files (x86)\Cygwin\CygwinPortable\App\Cygwin\bin
+ls //file list

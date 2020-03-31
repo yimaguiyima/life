@@ -1,0 +1,6 @@
+ mkdir 
+git init
+git diff -w file
+git add gitTutorial.txt
+git status
+git commit -m "git commit use"
