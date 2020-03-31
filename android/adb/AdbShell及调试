@@ -1,0 +1,173 @@
+()root
+执行adb disable-verity提示：Device is locked. Please unlock the device first 解决方法：
+(1)进入开发者模式，打开OEM 解锁
+(2)adb reboot bootloader进入fastboot模式
+
+(3)进入cd ~/Android/Sdk/platform-tools目录，执行：sudo ./fastboot flashing unlock
+
+(4).按音量上键确认
+
+./fastboot reboot
+
+(5)开机之后，依次adb root，adb disable-verity，adb reboot即可，此时查看OEM 解锁项是灰显的
+
+aa可能无法进入，那就在关机的情况下，按power+音量上键进入。
+fastboot flashing unlock,会提示Finished. Total time: 0.025s
+
+b.fastboot flashing unlock执行后如果出现“< waiting for device >”的情况，进入~/Android/Sdk/platform-tools目录，执行：sudo ./fastboot flashing unlock
+
+如果机器没有自动重启，则执行fastboot reboot重启手机.在运行过程中我的机器会自动重启所以省略了这一步
+注：此方法亦可解决Q平台执行adb remount后，出现“E Skipping /system ...”的情况。
+
+如果提示adb disable-verity不能用，就先用命令adb version查看一下adb版本，升级adb版本到1.0.32版本之上。）成功
+
+
+()adb 指令
+adb start-server     adb kill-server 启动/关闭 adb服务
+adb install -r apk
+应用的签名不一致，可能是发布版和调试版签名不同所致。也有可能是没卸载旧应用导致。
+INSTALL_FAILED_INSUFFICIENT_STORAGE存储空间不足，需要检查设备存储情况。
+-r 代表如果apk已安装，重新安装apk并保留数据和缓存文件。
+adb uninstall -k （apk包名） 卸载 app 但保留数据和缓存文件：
+
+     adb shell pm list packages -f
+列出系统应用的所有包名： 
+adb shell pm list packages -s
+
+列出除了系统应用的第三方应用包名： 
+adb shell pm list packages -3 
+
+清除应用数据与缓存： 
+adb shell pm clear （apk包名）
+
+     adb shell input keyevent 3
+
+     adb shell dumpsys activity activities | grep "systemui"
+
+     adb shell screenrecord  /sdcard/demo.3gp
+
+adb push (文件路径) (想要push的路径) 
+
+adb pull (文件路径) (想要pull的路径) 
+
+     命令行启动Activity
+     adb shell am start -n com.mediatek.engineermode/com.mediatek.engineermode.EngineerMode
+     adb shell am start -n com.mediatek.mtklogger/com.mediatek.mtklogger.MainActivity
+     adb shell am start -n  com.android.settings/com.android.settings.Settings
+adb shell am start -n  com.android.settings/com.android.settings.Settings 
+
+需要强制停止应用，则执行以下命令： 
+adb shell am force-stop （apk包名） 
+
+adb shell am force-stop  com.android.settings
+adb shell [shell_command]，在实际使用中，经常与grep或findstr一起使用，起到过滤作用，查看自己需要的关键信息。
+adb shell dumpsys activity services com.android.music
+
+adb shell dumpsys package <packagename>
+输出应用的详细信息，包括签名信息，UID，权限等。
+adb shell dumpsys activity | grep -i run
+
+     获取ro值
+     adb shell getprop > prop.txt
+     adb shell getprop persist.sys.timezone
+     adb shell setprop persist.sys.timezone Asia/Beijing    (只允许修改persist值，ro值修改不了)
+2.查看屏幕分辨率 
+adb shell wm size 
+     抓取log
+     adb logcat -s + TAG
+     adb logcat | grep "log中关键字“
+     adb logcat > log.txt  没有时间点
+     adb logcat -v time  >log.txt 
+
+Android的多媒体文件主要存储在/data/data/com.android.providers.media/databases目录
+
+adb pull /data/data/com.android.providers.media/databases databases
+
+
+
+写卡工具 GRSIMWrite3.1.8 
+fota 差分包与验证。
+meta tool写吗工具，SP_Meta
+ModemMETA
+
+启动Activity
+adb shell am start [options] <intent>
+eg：adb shell am start -n com.android.music/.MainActivity
+启动音乐主界面
+
+adb shell am start -a com.sagereal.android.setupwizard.PRIVACY_POLICIES
+adb shell am start -W -n com.google.android.gmsintegration/.PRIVACY_POLICIES
+
+启动Service
+adb shell am startservice [options] <intent>
+eg：adb shell am start -n com.android.music/.service.MusicService
+启动音乐服务
+
+启动广播
+adb shell am broadcast [options] <intent>
+eg：adb shell am broadcast -a com.android.launcher3.action.PARTNER_CUSTOMIZATION
+发送开机广播
+
+强制停止应用
+adb shell am force-stop <packagename>
+eg：adb shell am force-stop com.android.music
+停止音乐应用
+
+am <command> [options] <intent>
+command:start\startservice\broadcast\force-stop
+options: a c n (action\category\component)
+
+模拟按键
+主要是通过命令input来实现的，通过该命令可以模拟外部输入事件
+adb shell input [<souce>] <command>
+如使用
+adb shell input keyevent <keycode>
+keycode对应的就是源码中定义的按键值，包括返回键，音量键，电源键等。
+例如：
+adb shell input keyevent 26  模拟执行按电源键
+adb shell input keyevent 3   模拟执行按HOME键
+adb shell input keyevent 4   模拟执行按返回键
+adb shell input keyevent 224   点亮屏幕
+adb shell input keyevent 223   熄灭屏幕
+文本输入
+当焦点处于文本控件中，可以通过如下命令执行文本输入
+adb shell input text 输入的文字
+
+adb shell getprop | grep product //获取系统属性值
+adb shell dumpsys battery  查看电池状况
+
+adb shell dumpsys window displays
+Dump time : 2020-01-01 02:51:48.767
+WINDOW MANAGER DISPLAY CONTENTS (dumpsys window displays)
+  Display: mDisplayId=0
+    init=480x800 240dpi cur=480x800 app=480x800 rng=480x444-800x764
+    deferred=false mLayoutNeeded=false mTouchExcludeRegion=SkRegion((0,0,480,800))
+其中 mDisplayId 为 显示屏编号，init 是初始分辨率和屏幕密度，app 的高度比 init 里的要小，表示屏幕底部有虚拟按键，高度为 800 - 800 = 0,表示没有虚拟按键.126px 合 42dp。
+
+adb shell cat /system/build.prop 查看硬件与系统属性
+adb shell dumpsys iphonesubinfo  其中的 Device ID就是IMEI,查看IMEI
+
+如何用adb获得手机里面某个apk的应用信息、版本信息
+adb shell dumpsys package com.amap.android.location
+adb shell pm list packages -f --show-versioncode > log //查看手机apk versionCode
+aapt dump badging *.apk //versionCode 4091
+
+集成 apk !!!!!! 删除out目录
+
+二、调试
+1.断点类型（断点在不同的位置）
+行断点
+方法断点：一般用来检查方法的「输入参数」与「返回值」
+变量断点：变量上打断点，每次变量变化触发断点流程（可以添加观察值）
+条件断点：断点处于循环体中，右键直接设置循环变量
+日志断点:右键断点，去掉「Suspend」的勾选，勾选「Evaluate and log」在此输入想输出的内容。
+临时断点:alt + 右键/run -->Toggle Temporary Line Breakpoint
+异常断点
+程序出现崩溃，比如报NullPointerException等异常，通常情况是先复现问题，再抓log，打断点分析异常等，实际上不必这么麻烦，AndroidStudio提供了自动捕获异常的功能，就是异常断点功能。开发者不必自己去可能出现异常的地方打断点。只需打开breakpoints界面进行相关操作即可。
+依次点击工具栏的Run—->View Breakpoints…即可打开breakpoints界面（或则使用前面提到的那个快捷键）：
+点击左上角的“+”。选择JavaException Breakpoints，然后选择NullPointerException即可。 
+这样开发者就不用自己去打断点，直接Debug运行就可，系统会自动在出现NullPointerException异常的地方停顿并打上断点。
+
+
+
+

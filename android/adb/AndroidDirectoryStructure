@@ -1,0 +1,2 @@
+Android目录结构
+sagereal-->ProjectConfig.mk --> sagereal_target_project = k80hd_bsp_fwv_512m 定义输出目录.

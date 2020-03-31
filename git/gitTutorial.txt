@@ -2,5 +2,137 @@
 git init
 git diff -w file
 git add gitTutorial.txt
+git add .
 git status
+()撤销操作
+git reset HEAD 如果后面什么都不跟的话 就是上一次add 里面的全部撤销了 
+git reset HEAD XXX/XXX/XXX.java 就是对某个文件进行撤销了
+
 git commit -m "git commit use"
+git commit --amend //merge last time
+()
+如果是文件夹：git rm -r --cached 文件夹名
+如果是文件：git rm --cached 文件名
+()add gitignore 
+1. In the folder where you need to create a .gitignore file, right-click and select
+Git Bash enters the command line and enters the directory where the project is located.
+
+2. Type touch .gitignore to generate a ".gitignore" file in the folder.
+Then enter the folder and files you want to ignore in the ".gitignore" file.
+
+()scp -P 8947 -r  wuxuhua@192.168.0.205:/home/wuxuhua/disk2/39O/COMMON/.git ./
+git clone
+git clone 源仓库 目标仓库
+git remote add origin git@github.com:your name/repository name.git // 将本地仓库和你自己的远程仓库关联起来，origin是仓库的名字
+git checkout -f;
+git reset HEAD 回退到当前版本(git add 错误,不修改工作区)
+git reset --hard HEAD (修改工作区代码)
+git revert -n commitid // 反做;
+
+()
+1. 代码规范
+（1）注释规范 redmine [bugid] [name] [key]  [date]
+（2）commit规范 test [bugid] [key]  [name]
+
+2.redmine规格
+ （1）. fixed 
+（2）. 不需要修改，与测试沟通后
+ongoing 指给组长
+
+3.绩效填写规范
+等级 E 不需要修改；d 半天 C 1-2天，B 是2天以上;
+填写规范：
+
+()代码提交流程
+git pull origin brname#Redmine 13420 wuxuhua modified for otg menu remove.2020-02-25 begin
+
+git diff -w
+git add path
+git status
+
+ -m "@{test bugid desc}.name"
+()common
+git commit -m "@{[should]test bugid desc}.name"
+git log
+git push origin HEAD:refs/for/branches
+
+cherry pick dev_France dev_France_Orange
+()分支名被修改（dev_France_Orange）
+git fetch -p
+git checkout dev_France_Orange
+
+mk文件不能在PRODUCT_PACKAGES中间进行注释
+PRODUCT_PACKAGES += \
+    AssistantGo \
+    Chrome \
+    DuoGo \
+    GalleryGo \
+    GMailGo \
+    GoogleSearchGo \
+    LatinImeGoogleGo \
+    MapsGo \
+    NavGo \
+    YouTubeGo
+git diff 重点对比不是自己修改的代码，要维护原装
+（）审核失败流程
+ aboned, 
+ git reset …forward，
+ git add xx.java xxx.java 
+git commit --amend
+ git commit --amend --no-edit
+
+（）对比修改
+git diff -w filename
+git status ./ 
+
+（）恢复之前的修改
+git checkout path
+git checkout -f 放弃本地修改，强制检出代码
+git checkout .  #本地所有的修改，没有提交的，都返回到原来的状态
+（）撤销 git add
+git reset HEAD 如果后面什么都不跟的话 就是上一次add 里面的全部撤销了 
+git reset HEAD XXX/XXX/XXX.java 就是对某个文件进行撤销了
+
+()切换分支
+git br
+git br -a
+git checkout brname
+git pull origin brname
+
+有时checkout 失败，提示一些修改会被覆盖，要commit这时可以
+git checkout -f
+
+git show <commit-hashId> filename 可以显示某次提交的某个内容的修改信息
+ 3.git pull 发生冲突解决办法
+ 　1.git stash (把本地冲突的代码隐藏)
+
+　　2.git pull 
+
+　　3.git stash pop (将隐藏的和pull 下来的合并，打开文件，解决冲突)
+分支名发生变化(dev_Orange变dev_France_Orange)
+（）同步分支
+git fetch -p
+git checkout dev_France_Orange
+git pull
+命令行解释--prune -p -- remove any remote tracking branches that no longer exist remotely
+英文意思：删除不存在的远程跟踪分支, 获取远程仓库的新分支以及删除远程仓库已删除的分支
+
+()git reflog
+git revert
+
+法国共性问题，不需要should
+dev_France,5024,5313;
+
+seagal/product new 过程中将produpro
+
+commit
+@{test 13879 [France Common] Feature GDPR message from ADUPS}jianglihua
+
+git add
+git commit -m "@{[should]test 15497 [Interface display] Black screen flashes before entering the standby interface}zhangmengchun"
+
+git commit -m "@{test 17736 [Interface display] The boot wizard interface will load the blank page to the next page before setting the lock screen to the next page.}zhangmengchun"
+
+@{test 13879 [france common] update PrivacyPolicy }jianglihua
+
+

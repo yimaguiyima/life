@@ -1,0 +1,118 @@
+ABS架构下的编译方法 
+（适用于JB/KK版本）
+./mk {project}  new/n/r                                             编译eng版本软件
+./mk -o=TARGET_BUILD_VARIANT=user {project}  new/n/r                         编译usr版本软件
+
+./mk -t mm packages/apps/Browser/                                        模块编译
+
+1. framework/base
+
+2 ./mk clean   git clean -fd ./                                          （区别？？？）
+
+3 .KK平台 首次编译launcher3
+./mk -t mma packages/apps/Launcher3
+后续再编译， ./mk -t mm packages/apps/Launcher3
+
+
+4 ./mk custgen 在kk版本需要执行拷贝时， JB版本默认执行
+
+5 ./mk ptgen  修改分区表后快速编译     （分区表？？？）
+
+6 ./mk sign-image  带widevine （什么是widevine？？？）
+
+7 ./mk update-api   添加了一些新的api   （@hide ？？？）
+
+8 ./mk upadte-modem  更新modem  （modem什么东西？？？）
+
+9 ./mk snod     重新打包成img或者bin文件
+
+10 ./mk listp    列出当前目录下包含projectConfig.mk（mediatek/config/{project}/）的项目名
+
+
+AOSP编译：
+a.原生编译方法：
+     整体编译步骤：
+     1.source build/envsetup.sh
+     2.lunch
+     3.X          ------> full-{project}-eng
+     4.make -j24 2>&1 | tee build.log                  
+     或者make -j24 -k 2>&1 | tee build.log             
+          注：-j24取决于CPU的核数 查看cpu核数：cat  /proc/cpuinfo | grep processor | wc -l   
+             2>&1 表示将标准错误重定向到标准输出   
+             tee 表示同时将log输出到控制台和文件 
+             "-k": keep going when encounter error
+     *************5.remake的方法：依旧执行make -j24 -k 2>&1 | tee rebuild.log
+     6.重新new需要先执行clean方法 再进行new操作
+     
+     2.android模块编译：
+     Build android module
+     mmm <directory>
+     example: mmm frameworks/base
+
+     Rebuild android module
+     mmm -B <directory>
+     example: mmm -B frameworks/base
+
+     Build android module by name
+     make -j24 <module name>
+     example: make -j24 libjpeg
+
+     建议先使用：mmm -B，若无文件改变，再使用mmma，再次编译即可使用mmm -B      *************(建议在进行模块编译的时间加入 | tee mmbuild.log,收集模块编译时的log，编译完成后在log中查找“Install”即可查看编译生成的文件，(可直接将生成的APK文件夹push到/system/app/（/system/priv-app）对应的APK文件夹中))
+     eg：mmm -B framework/base/  | tee mmbuild.log     
+          在mmbuild.log中查找“Install”关键字可看到如下生成的文件
+               Install：out/target/product/sagetel6582_wt_l/system/framework/ext.jar'
+               Install: out/target/product/sagetel6582_wt_l/system/framework/framework.jar
+               
+b.sagereal编译方法:
+
+     ./mk lp/listp/
+     
+./mk + [?usr] + {project} + [action]+[other]
+     ./mk {project} n/new/r
+     ./mk -u {project}  n/new/r
+     ./mk {project} mm packages/apps/Browser/
+     ./mk {project} snod/ptgen/sign-image/update-api/upadte-modem
+
+./mk -ud VQ502_GH5024_Spark mm packages/apps/Launcher3
+
+
+二、模块编译
+adb remount
+
+push apk到手机：
+adb push out/target/product/sr6572_wet_l/system/vendor/app/ChromeCustomizations/ChromeCustomizations.apk system/vendor/app/ChromeCustomizations/ChromeCustomizations.apk
+ ./clean_project_Sagereal.sh 
+
+三、整体编译步骤：
+拉取分支:
+git clone 
+git checkout -f
+git pull orign 分支名
+./mk l
+设置 SAGEREAL_WIDEVINE_SUPPORT 为null
+./
+./mk -ud project n
+
+提交代码 git push origin HEAD:refs/for/分支名
+一、刷机操作
+1.打开tool运行，选择 
+/home/gms/SP_Flash_Tool/MTK_AllInOne_DA.bin
+/home/gms/Project/39O/VQ571_AH5712_Claro/MT6739_Android_scatter.txt
+format all +download
+
+
+2.关闭手机，长按件 ,download
+3.出错，进行ProjectConfig.mk查看
+SAGEREAL_WIDEVINE_SUPPORT = yes 改为no重新编译（不建议，）
+
+./mk -ud VQ571_AH5712_Claro n && ./mk -ud VQ571_AH5712_Claro sign-image
+
+clean.sh 命令
+ ./mk -ud VQ571_AH5712_Claro sign-image 分配签名
+ 
+sourceinsight导文件类型
+options/Document options/Document type/Java source file/File filter
+
+*.java;*.jav;*.aidl;*.sh;*.mk;*.kl;*.prop;*.rc;*.conf;*.cc
+
+./mk -ud projectname update-api
