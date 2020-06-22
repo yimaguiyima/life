@@ -1,26 +1,15 @@
- mkdir 
-git init
-git diff -w file
-git add gitTutorial.txt
-git add .
-git status
 ()撤销操作
 git reset HEAD 如果后面什么都不跟的话 就是上一次add 里面的全部撤销了 
 git reset HEAD XXX/XXX/XXX.java 就是对某个文件进行撤销了
 
 git commit -m "git commit use"
 git commit --amend //merge last time
-()
+()删除操作
 如果是文件夹：git rm -r --cached 文件夹名
 如果是文件：git rm --cached 文件名
 ()add gitignore 
-1. In the folder where you need to create a .gitignore file, right-click and select
-Git Bash enters the command line and enters the directory where the project is located.
-
-2. Type touch .gitignore to generate a ".gitignore" file in the folder.
-Then enter the folder and files you want to ignore in the ".gitignore" file.
-
-()scp -P 8947 -r  wuxuhua@192.168.0.205:/home/wuxuhua/disk2/39O/COMMON/.git ./
+touch .gitignore
+()scp -P 8947 -r  xxx@192.168.0.205:/home/wuxuhua/disk2/39O/COMMON/.git ./
 git clone
 git clone 源仓库 目标仓库
 git remote add origin git@github.com:your name/repository name.git // 将本地仓库和你自己的远程仓库关联起来，origin是仓库的名字
@@ -38,10 +27,6 @@ git revert -n commitid // 反做;
  （1）. fixed 
 （2）. 不需要修改，与测试沟通后
 ongoing 指给组长
-
-3.绩效填写规范
-等级 E 不需要修改；d 半天 C 1-2天，B 是2天以上;
-填写规范：
 
 ()代码提交流程
 git pull origin brname#Redmine 13420 wuxuhua modified for otg menu remove.2020-02-25 begin
@@ -119,20 +104,65 @@ git pull
 
 ()git reflog
 git revert
-
-法国共性问题，不需要should
-dev_France,5024,5313;
-
-seagal/product new 过程中将produpro
-
-commit
-@{test 13879 [France Common] Feature GDPR message from ADUPS}jianglihua
-
-git add
 git commit -m "@{[should]test 15497 [Interface display] Black screen flashes before entering the standby interface}zhangmengchun"
 
 git commit -m "@{test 17736 [Interface display] The boot wizard interface will load the blank page to the next page before setting the lock screen to the next page.}zhangmengchun"
-
-@{test 13879 [france common] update PrivacyPolicy }jianglihua
+1.使用git
+本地新建仓库，进行初始化关联远程仓库。cd d:/test
+ mkdir
+git init
+用ls -ah命令,可以看到git目录
+git status: file status
+git add filename(.txt)
+git add file2.txt file3.txt
+git add gitTutorial.txt
+git add .
+git status
+git commit -m "zhushi"
+git commit -a -m ""
+git diff fileuse：compare file and file in repositry
+git diff -w file
+git log 
+git log --pretty=oneline
+(2)github 
+explore 探索，glst代码片段，news feed订阅的通知，issues新建的问题（created、assigned、mentioned）
+star 表示持续关注的，fork 别人的项目
+2.管理修改
+版本回退与管理修改
+git reset --hard HEAD^:back,往上 100 个版本写 100 个^比较容易数不过来，所以写成 HEAD~100
+git reset --hard banbenhao
+git checkout --filename :回到还没有提交的状态。
+git checkout -- file命令中的--很重要，没有--，就变成了“创建一个新分支”的命令。
+穿梭前，用git log可以查看提交历史，以便确定要回退到哪个版本。
+要重返未来，用git reflog查看命令历史，以便确定要回到未来的哪个版本。
+3.git远程配置
+（1）ssh-keygen -t rsa -C "youremail@example.com"，然后回车，输入密码，确认密码
+(2)eval "$(ssh-agent -s)"
+(3)ssh-add ~/.ssh/id_rsa,回车然后输入密码。
+（4）登陆 GitHub，打开“Account settings”，“SSH Keys”页面，填上任意 Title，在 Key 文本框里粘贴id_rsa.pub文件的内容。
+ssh -T urls,然后输入 yes
+git log --oneline --decorate --graph --all
+git merge origin/master
+git remote add origin https://github.com/yimaguiyima/test.git(add 关联remote 仓库)
+git remote -v(查看远程版本)
+git remote show origin
+git remote rm
+git remote add <主机名> <网址>
+git remote rename <原主机名> <新主机名>
+4.项目管理参考公司策略
+featuer:为新增功能，合并完成后将分支合并到develop上去，给测试人员。
+master分支，develop分支没有问题迁移到master分支，版本号x.x.x第一位代表第几年
+第二位代表哪个月，哪一周.
+刚开始因为功能少，可以直接在master分支上进行开发。带到新增功能可以从master上拉去分支；
+git push -u origin master 用于将本地分支的更新，推送到远程主机
+git pull origin <分支名称（默认master）> 拉下服务器代码
+git fetch <远程主机名> <分支名>
+[rejected] failed to push to some refs,git push origin master -f
+git branch命令的-r选项，可以用来查看远程分支，-a选项查看所有分支。
+ git checkout -b newBrach origin/master
+ git merge origin/master或者 git rebase origin/master
+ git pull <远程主机名> <远程分支名>:<本地分支名>
+git pull --rebase <远程主机名> <远程分支名>:<本地分支名>
+git远程操作http://www.ruanyifeng.com/blog/2014/06/git_remote.html
 
 
